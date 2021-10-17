@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_patterns">Patterns</string>
+    <string name="title_tutorials">Tutorials</string>
+    <string name="title_social">Social</string>
+    <string name="title_personal">Personal</string>
+</resources>
