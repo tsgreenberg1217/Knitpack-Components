@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.knitpacktheme.theme.KnitPackTheme
+import com.example.knitpacktheme.theme.Typography
 
 val patternsList: List<String> = listOf(
     "2x2 Rib",
@@ -61,11 +64,7 @@ object BottomSheetUI {
                         itemsIndexed(choices) { i, choice ->
                             Text(
                                 text = choice,
-                                style = TextStyle(
-                                    fontFamily = FontFamily(Font(R.font.amiko_regular)),
-                                    fontSize = 24.sp,
-                                    color = Color(131, 52, 71)
-                                ),
+                                style = Typography.body1,
                                 modifier = Modifier.clickable {
 
                                 }
