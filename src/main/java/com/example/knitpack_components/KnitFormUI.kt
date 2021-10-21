@@ -1,5 +1,7 @@
 package com.example.knitpack_components
 
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.knitpacktheme.theme.Mulberry_Light
 import com.example.knitpacktheme.theme.Mulberry_Primary
 import com.example.knitpacktheme.theme.Off_White
+import com.tgreenberg.core.models.KnitUri
 
 
 object KnitFormUI {
@@ -99,7 +104,10 @@ object KnitFormUI {
     @Composable
     fun KnittingDialogLauncher(title: String, value: String?, launchCallback: () -> Unit) {
 
-        var borderColor = remember {
+        val titleColor = remember {
+            mutableStateOf(Color.Black)
+        }
+        val borderColor = remember {
             mutableStateOf(Color.LightGray)
         }
 
@@ -123,7 +131,7 @@ object KnitFormUI {
                     text = title,
                     fontFamily = FontFamily(Font(R.font.amiko_bold)),
                     fontSize = 20.sp,
-                    color = borderColor.value
+                    color = titleColor.value
                 )
 
                 value?.let {
@@ -151,7 +159,10 @@ object KnitFormUI {
     }
 
     @Composable
-    fun PictureField() {
+    fun PictureField(
+        images: List<KnitUri>,
+        onClick: () -> Unit
+    ) {
         Column {
             Text(
                 text = "Pictures",
@@ -159,80 +170,79 @@ object KnitFormUI {
                 fontSize = 20.sp,
                 color = Color.Black
             )
-            KnitPictures()
+            KnitPictures(images, modifier = Modifier.clickable { onClick() })
         }
     }
 
 
     @Composable
-    fun KnitPictures() {
+    fun KnitPictures(
+        images: List<KnitUri>,
+        modifier: Modifier
+    ) {
+
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(200.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
+
+            val columnModifier = Modifier
+                .background(Off_White, RoundedCornerShape(0.dp))
+                .fillMaxHeight()
+                .weight(1f)
+                .width(100.dp)
+
             Column(
-                modifier = Modifier
-                    .background(Off_White, RoundedCornerShape(0.dp))
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .width(100.dp)
+                modifier = columnModifier
             ) {
-                ImageHolder(
-                    upperMod = Modifier
-                        .weight(1f)
-                        .fillMaxSize()
-                )
+                KnitFormImageHolder(images[0].res, modifier = Modifier.weight(1f))
             }
             Column(
-                modifier = Modifier
-                    .background(Off_White, RoundedCornerShape(0.dp))
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .width(100.dp),
+                modifier = columnModifier,
                 verticalArrangement = Arrangement.SpaceAround
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    ImageHolder(
-                        upperMod = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    )
-                    ImageHolder(
-                        upperMod = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    )
+                    KnitFormImageHolder(images[1].res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[2].res, modifier = Modifier.weight(1f))
                 }
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    ImageHolder(
-                        upperMod = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    )
-                    ImageHolder(
-                        upperMod = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    )
+                    KnitFormImageHolder(images[3].res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[4].res, modifier = Modifier.weight(1f))
                 }
             }
         }
     }
 
     @Composable
+    fun KnitFormImageHolder(uri: Uri? = null, modifier: Modifier) =
+        loadImage(uri = uri).value?.let {
+            Image(
+                bitmap = it.asImageBitmap(),
+                contentDescription = "",
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(all = 3.dp),
+                contentScale = ContentScale.Crop
+            )
+        } ?: run {
+            ImageHolder(modifier = modifier)
+        }
+
+    @Composable
     fun ImageHolder(
-        upperMod: Modifier
+        modifier: Modifier
     ) {
         Box(
-            modifier = upperMod
+            modifier = modifier
+                .fillMaxSize()
                 .padding(all = 3.dp)
                 .background(Mulberry_Light)
         ) {
@@ -249,5 +259,5 @@ object KnitFormUI {
 @Preview
 @Composable
 fun previewImage() {
-    KnitFormUI.PictureField()
+//    KnitFormUI.PictureField {}
 }
