@@ -163,6 +163,13 @@ object KnitFormUI {
         images: List<KnitUri>,
         onClick: () -> Unit
     ) {
+
+        val pictureMap = mutableMapOf<Int, KnitUri>().apply {
+
+            repeat(4) { index ->
+                this[index] = if (index < images.size) images[index] else KnitUri(null)
+            }
+        }
         Column {
             Text(
                 text = "Pictures",
@@ -170,14 +177,14 @@ object KnitFormUI {
                 fontSize = 20.sp,
                 color = Color.Black
             )
-            KnitPictures(images, modifier = Modifier.clickable { onClick() })
+            KnitPictures(pictureMap, modifier = Modifier.clickable { onClick() })
         }
     }
 
 
     @Composable
     fun KnitPictures(
-        images: List<KnitUri>,
+        images: MutableMap<Int, KnitUri>,
         modifier: Modifier
     ) {
 
@@ -197,7 +204,7 @@ object KnitFormUI {
             Column(
                 modifier = columnModifier
             ) {
-                KnitFormImageHolder(images[0].res, modifier = Modifier.weight(1f))
+                KnitFormImageHolder(images[0]?.res, modifier = Modifier.weight(1f))
             }
             Column(
                 modifier = columnModifier,
@@ -207,15 +214,15 @@ object KnitFormUI {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    KnitFormImageHolder(images[1].res, modifier = Modifier.weight(1f))
-                    KnitFormImageHolder(images[2].res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[1]?.res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[2]?.res, modifier = Modifier.weight(1f))
                 }
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    KnitFormImageHolder(images[3].res, modifier = Modifier.weight(1f))
-                    KnitFormImageHolder(images[4].res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[3]?.res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[4]?.res, modifier = Modifier.weight(1f))
                 }
             }
         }
@@ -233,11 +240,11 @@ object KnitFormUI {
                 contentScale = ContentScale.Crop
             )
         } ?: run {
-            ImageHolder(modifier = modifier)
+            DefaultImageHolder(modifier = modifier)
         }
 
     @Composable
-    fun ImageHolder(
+    fun DefaultImageHolder(
         modifier: Modifier
     ) {
         Box(
