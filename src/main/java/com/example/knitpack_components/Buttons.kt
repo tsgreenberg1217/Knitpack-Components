@@ -17,7 +17,7 @@ import com.example.knitpacktheme.theme.Off_White
 @Composable
 fun MulberryButton(text: String, onclick : ()->Unit){
     Button(
-        onClick = { onclick },
+        onClick = { onclick() },
         shape = RoundedCornerShape(3.dp),
         modifier = Modifier
             .fillMaxWidth()

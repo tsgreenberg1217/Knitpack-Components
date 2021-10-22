@@ -204,7 +204,7 @@ object KnitFormUI {
             Column(
                 modifier = columnModifier
             ) {
-                KnitFormImageHolder(images[0]?.res, modifier = Modifier.weight(1f))
+                KnitFormImageHolder(images[0], modifier = Modifier.weight(1f))
             }
             Column(
                 modifier = columnModifier,
@@ -214,23 +214,24 @@ object KnitFormUI {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    KnitFormImageHolder(images[1]?.res, modifier = Modifier.weight(1f))
-                    KnitFormImageHolder(images[2]?.res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[1], modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[2], modifier = Modifier.weight(1f))
                 }
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.weight(1f)
                 ) {
-                    KnitFormImageHolder(images[3]?.res, modifier = Modifier.weight(1f))
-                    KnitFormImageHolder(images[4]?.res, modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[3], modifier = Modifier.weight(1f))
+                    KnitFormImageHolder(images[4], modifier = Modifier.weight(1f))
                 }
             }
         }
     }
 
     @Composable
-    fun KnitFormImageHolder(uri: Uri? = null, modifier: Modifier) =
-        loadImage(uri = uri).value?.let {
+    fun KnitFormImageHolder(imageResource: KnitUri? = null, modifier: Modifier) =
+
+        imageResource?.res?.let {
             Image(
                 bitmap = it.asImageBitmap(),
                 contentDescription = "",
@@ -242,6 +243,19 @@ object KnitFormUI {
         } ?: run {
             DefaultImageHolder(modifier = modifier)
         }
+
+//        loadImage(uri = uri).value?.let {
+//            Image(
+//                bitmap = it.asImageBitmap(),
+//                contentDescription = "",
+//                modifier = modifier
+//                    .fillMaxSize()
+//                    .padding(all = 3.dp),
+//                contentScale = ContentScale.Crop
+//            )
+//        } ?: run {
+//            DefaultImageHolder(modifier = modifier)
+//        }
 
     @Composable
     fun DefaultImageHolder(

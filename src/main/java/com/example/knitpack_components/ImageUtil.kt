@@ -17,7 +17,7 @@ import java.io.File
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun loadImage(
-    uri: Uri?,
+    uri: Bitmap?,
     @DrawableRes defaultImg:Int? = null
 ): MutableState<Bitmap?> {
     val bitmapState: MutableState<Bitmap?> = mutableStateOf(null)
