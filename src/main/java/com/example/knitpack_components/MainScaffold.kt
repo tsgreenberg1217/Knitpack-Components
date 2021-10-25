@@ -1,6 +1,5 @@
 package com.example.knitpack_components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
@@ -12,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.knitpacktheme.KnitPackIcons
 import com.example.knitpacktheme.theme.Mid_Grey
@@ -22,14 +19,15 @@ import com.example.knitpacktheme.theme.Off_White
 
 data class MainIconData(
     val iconRes: Int,
-    val routeObj: MainPageRoute
+    val routeName: String,
+    val iconDesc: String
 )
 
 val iconList = listOf(
-    MainIconData(KnitPackIcons.LOYALTY, MainPageRoute.Patterns),
-    MainIconData(KnitPackIcons.PLAY_CIRCLE, MainPageRoute.Tutorials),
-    MainIconData(KnitPackIcons.GROUP, MainPageRoute.Social),
-    MainIconData(KnitPackIcons.PERSON, MainPageRoute.Personal)
+    MainIconData(KnitPackIcons.LOYALTY, KnitNavRoutes.PatternsRoutes.PatternGraphRoot.route, "Patterns"),
+    MainIconData(KnitPackIcons.PLAY_CIRCLE, KnitNavRoutes.TutorialsRoutes.TutorialGraphRoot.route, "Tutorials"),
+    MainIconData(KnitPackIcons.GROUP, KnitNavRoutes.SocialsRoutes.SocialGraphRoot.route, "Social"),
+    MainIconData(KnitPackIcons.PERSON, KnitNavRoutes.PersonalsRoutes.PersonalGraphRoot.route, "Personal")
 )
 
 @Composable
@@ -86,18 +84,17 @@ fun MainScaffold(
             ) {
 
                 iconList.forEach {
-                    val descString = stringResource(id = it.routeObj.resId)
                     BottomNavigationItem(
-                        selected = isSelected(it.routeObj.route),
-                        onClick = { onNavigate(it.routeObj.route) },
+                        selected = isSelected(it.routeName),
+                        onClick = { onNavigate(it.routeName) },
                         icon = {
                             Icon(
                                 painterResource(id = it.iconRes),
-                                contentDescription = descString,
+                                contentDescription = it.iconDesc,
                             )
                         },
                         label = {
-                            Text(text = descString, color = MaterialTheme.colors.primary)
+                            Text(text = it.iconDesc, color = MaterialTheme.colors.primary)
                         },
                         selectedContentColor = Mulberry_Primary,
                         unselectedContentColor = Mid_Grey
@@ -123,9 +120,29 @@ fun MainScaffold(
     }
 }
 
-sealed class MainPageRoute(val route: String, @StringRes val resId: Int) {
-    object Patterns : MainPageRoute("route_patterns", R.string.title_patterns)
-    object Tutorials : MainPageRoute("route_tutorials", R.string.title_tutorials)
-    object Social : MainPageRoute("route_social", R.string.title_social)
-    object Personal : MainPageRoute("route_personal", R.string.title_personal)
+
+sealed class KnitNavRoutes {
+    sealed class PatternsRoutes(val route: String) : KnitNavRoutes() {
+        object PatternGraphRoot : PatternsRoutes("PatternRoot")
+        object PatternFirst : PatternsRoutes("PatternFirst")
+        object PatternSecond : PatternsRoutes("PatternSecond")
+    }
+
+    sealed class TutorialsRoutes(val route: String) : KnitNavRoutes() {
+        object TutorialGraphRoot : TutorialsRoutes("TutorialRoot")
+        object TutorialFirst : TutorialsRoutes("TutorialFirst")
+        object TutorialSecond : TutorialsRoutes("TutorialSecond")
+    }
+
+    sealed class SocialsRoutes(val route: String) : KnitNavRoutes() {
+        object SocialGraphRoot : SocialsRoutes("SocialRoot")
+        object SocialFirst : SocialsRoutes("SocialFirst")
+        object SocialSecond : SocialsRoutes("SocialSecond")
+    }
+
+    sealed class PersonalsRoutes(val route: String) : KnitNavRoutes() {
+        object PersonalGraphRoot : PersonalsRoutes("PersonalRoot")
+        object PersonalFirst : PersonalsRoutes("PersonalFirst")
+        object PersonalSecond : PersonalsRoutes("TutorialSecond")
+    }
 }
