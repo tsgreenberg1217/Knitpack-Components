@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.knitpacktheme.theme.Mulberry_Light
 import com.example.knitpacktheme.theme.Mulberry_Primary
 import com.example.knitpacktheme.theme.Off_White
@@ -102,7 +103,7 @@ object KnitFormUI {
 
 
     @Composable
-    fun KnittingDialogLauncher(title: String, value: String?, launchCallback: () -> Unit) {
+    fun KnittingDialogLauncher(title: String, value: String, launchCallback: () -> Unit) {
 
         val titleColor = remember {
             mutableStateOf(Color.Black)
@@ -134,9 +135,9 @@ object KnitFormUI {
                     color = titleColor.value
                 )
 
-                value?.let {
+                if (value.isNotEmpty()) {
                     Text(
-                        text = it,
+                        text = value,
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.amiko_regular)),
                             fontSize = 14.sp,
@@ -144,12 +145,14 @@ object KnitFormUI {
                         ),
                         modifier = leftComposableModifier
                     )
-                } ?: Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "",
-                    tint = Color(131, 52, 71),
-                    modifier = leftComposableModifier
-                )
+                } else {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "",
+                        tint = Color(131, 52, 71),
+                        modifier = leftComposableModifier
+                    )
+                }
             }
 
 
@@ -233,7 +236,7 @@ object KnitFormUI {
 
         imageResource?.res?.let {
             Image(
-                bitmap = it.asImageBitmap(),
+                painter = rememberImagePainter(data = it),
                 contentDescription = "",
                 modifier = modifier
                     .fillMaxSize()

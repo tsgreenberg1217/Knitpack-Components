@@ -24,10 +24,22 @@ data class MainIconData(
 )
 
 val iconList = listOf(
-    MainIconData(KnitPackIcons.LOYALTY, KnitNavRoutes.PatternsRoutes.PatternGraphRoot.route, "Patterns"),
-    MainIconData(KnitPackIcons.PLAY_CIRCLE, KnitNavRoutes.TutorialsRoutes.TutorialGraphRoot.route, "Tutorials"),
+    MainIconData(
+        KnitPackIcons.LOYALTY,
+        KnitNavRoutes.PatternsRoutes.PatternGraphRoot.route,
+        "Patterns"
+    ),
+    MainIconData(
+        KnitPackIcons.PLAY_CIRCLE,
+        KnitNavRoutes.TutorialsRoutes.TutorialGraphRoot.route,
+        "Tutorials"
+    ),
     MainIconData(KnitPackIcons.GROUP, KnitNavRoutes.SocialsRoutes.SocialGraphRoot.route, "Social"),
-    MainIconData(KnitPackIcons.PERSON, KnitNavRoutes.PersonalsRoutes.PersonalGraphRoot.route, "Personal")
+    MainIconData(
+        KnitPackIcons.PERSON,
+        KnitNavRoutes.PersonalsRoutes.PersonalGraphRoot.route,
+        "Personal"
+    )
 )
 
 @Composable
@@ -86,7 +98,9 @@ fun MainScaffold(
                 iconList.forEach {
                     BottomNavigationItem(
                         selected = isSelected(it.routeName),
-                        onClick = { onNavigate(it.routeName) },
+                        onClick = {
+                            if (!isSelected(it.routeName)) onNavigate(it.routeName)
+                        },
                         icon = {
                             Icon(
                                 painterResource(id = it.iconRes),

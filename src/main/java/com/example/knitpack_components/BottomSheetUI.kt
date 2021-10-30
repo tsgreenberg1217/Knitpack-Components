@@ -32,12 +32,33 @@ val patternsList: List<String> = listOf(
     "SSK"
 )
 
+val yarnWeightList: List<String> = listOf(
+    "Superfine",
+    "Fine",
+    "Light",
+    "Medium",
+    "Bulky",
+    "Super Bulky",
+    "Jumbo",
+)
+
+fun List<String>.mapToPatternChoice(): List<DialogChoice> = this.map {
+    DialogChoice.PatternChoice(it)
+}
+
+
+fun List<String>.mapToYarnChoice() = this.map {
+    DialogChoice.YarnChoice(it)
+}
+
+
 object BottomSheetUI {
     @Composable
     fun ListSelectDialog(
         showDialog: Boolean,
-        choices: List<String>,
-        setShowDialog: (Boolean) -> Unit
+        choices: List<DialogChoice>,
+        setShowDialog: (Boolean) -> Unit,
+        onChoose: (DialogChoice) -> Unit
     ) {
 
         val dialogWidth = 300.dp
@@ -53,15 +74,20 @@ object BottomSheetUI {
                         .padding(all = 8.dp)
                 ) {
                     LazyColumn {
-                        item { 
-                            Text(text = "Patterns")
+                        item {
+                            when (choices[0]) {
+                                is DialogChoice.PatternChoice -> Text(text = "Patterns")
+
+                                is DialogChoice.YarnChoice -> Text(text = "Yarn")
+                            }
                         }
-                        itemsIndexed(choices) { i, choice ->
+                        itemsIndexed(choices) { i, dChoice ->
                             Text(
-                                text = choice,
+                                text = dChoice.choice,
                                 style = Typography.body1,
                                 modifier = Modifier.clickable {
-
+                                    onChoose(dChoice)
+                                    setShowDialog(false)
                                 }
                             )
                             Divider(color = Color.LightGray)
@@ -75,12 +101,18 @@ object BottomSheetUI {
     }
 }
 
+
+sealed class DialogChoice(val choice: String) {
+    data class PatternChoice(val value: String) : DialogChoice(value)
+    data class YarnChoice(val value: String) : DialogChoice(value)
+}
+
 @Preview
 @Composable
 fun previewDialog() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        BottomSheetUI.ListSelectDialog(true, patternsList) {
-
-        }
-    }
+//    Surface(modifier = Modifier.fillMaxSize()) {
+//        BottomSheetUI.ListSelectDialog(true, patternsList) {
+//
+//        }
+//    }
 }
